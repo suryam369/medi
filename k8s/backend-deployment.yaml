@@ -12,6 +12,8 @@ spec:
       labels:
         app: medi-backend
     spec:
+      imagePullSecrets:
+        - name: medi-regcred
       containers:
         - name: medi-backend
           image: docker.io/suryamurala369/medi-backend:latest

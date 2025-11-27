@@ -12,8 +12,13 @@ spec:
       labels:
         app: medi-client
     spec:
+      imagePullSecrets:
+        - name: medi-regcred
       containers:
         - name: medi-client
           image: docker.io/suryamurala369/medi-client:latest
           ports:
             - containerPort: 80
+          env:
+            - name: REACT_APP_BACKEND_URL
+              value: "http://medi-backend-service:5000"

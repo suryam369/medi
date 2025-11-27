@@ -12,6 +12,8 @@ spec:
       labels:
         app: medi-admin
     spec:
+      imagePullSecrets:
+        - name: medi-regcred
       containers:
         - name: medi-admin
           image: docker.io/suryamurala369/medi-admin:latest
