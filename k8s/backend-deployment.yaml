@@ -17,15 +17,41 @@ spec:
           image: docker.io/suryamurala369/medi-backend:latest
           ports:
             - containerPort: 5000
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: medi-backend-service
-spec:
-  selector:
-    app: medi-backend
-  ports:
-    - port: 5000
-      targetPort: 5000
-  type: ClusterIP
+          env:
+            - name: MONGODB_URI
+              value: "mongodb+srv://badhri:Badhrim6477@cluster0.wwwcvcw.mongodb.net"
+
+            - name: CLOUDINARY_API_KEY
+              value: "149766976151324"
+            - name: CLOUDINARY_SECRET_KEY
+              value: "akIgxINa2cx0SUGDSsUf9R-vcec"
+            - name: CLOUDINARY_NAME
+              value: "dlxfez61p"
+
+            - name: JWT_SECRET
+              value: "badhri"
+
+            - name: ADMIN_EMAIL
+              value: "og123@gmail.com"
+            - name: ADMIN_PASSWORD
+              value: "og6477"
+
+            - name: EMAIL
+              value: "mediconnectplus108@gmail.com"
+            - name: PASS
+              value: "vfxb skba vjjx ibyh"
+
+            - name: RAZORPAY_KEY_ID
+              value: "rzp_test_vMJzshzmGap5FC"
+            - name: RAZORPAY_KEY_SECRET
+              value: "1pLcM4JuUVANoTF1cqGQQuA8"
+            - name: CURRENCY
+              value: "INR"
+
+            - name: GOOGLE_CLIENT_ID
+              value: "939406997619-dg4q1c1vhhs3nj8apl2sdf8kdkfi2u63.apps.googleusercontent.com"
+            - name: GOOGLE_CLIENT_SECRET
+              value: "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"
+
+            - name: STRIPE_SECRET_KEY
+              value: "sk_test_51R8LmUGgnc9fqbNvG1vJQRKeHR4Q60USrPcAKrYULm7Ktk9S7TVGKI6mIoLR5Z178uDbuK7zEpMVaAorA4ycKvpF00PDIQNSGT"
