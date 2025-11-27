@@ -23,14 +23,14 @@ pipeline {
                     sh """
                         export REACT_APP_BACKEND_URL=http://medi-backend-service:5000
                         npm install
-                        npm run build
+                        CI=false npm run build
                     """
                 }
                 dir('admin') {
                     sh """
                         export REACT_APP_BACKEND_URL=http://medi-backend-service:5000
                         npm install
-                        npm run build
+                        CI=false npm run build
                     """
                 }
             }
