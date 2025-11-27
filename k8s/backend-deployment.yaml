@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medi-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: medi-backend
+  template:
+    metadata:
+      labels:
+        app: medi-backend
+    spec:
+      containers:
+        - name: medi-backend
+          image: docker.io/suryamurala369/medi-backend:latest
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medi-backend-service
+spec:
+  selector:
+    app: medi-backend
+  ports:
+    - port: 5000
+      targetPort: 5000
+  type: ClusterIP
