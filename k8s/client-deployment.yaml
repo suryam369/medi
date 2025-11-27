@@ -16,7 +16,7 @@ spec:
         - name: medi-regcred
       containers:
         - name: medi-client
-          image: docker.io/suryamurala369/medi-client:latest
+          image: suryamurala369/medi-client:latest
           ports:
             - containerPort: 80
           env:

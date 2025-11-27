@@ -16,7 +16,7 @@ spec:
         - name: medi-regcred
       containers:
         - name: medi-backend
-          image: docker.io/suryamurala369/medi-backend:latest
+          image: suryamurala369/medi-backend:latest
           ports:
             - containerPort: 5000
           envFrom:
