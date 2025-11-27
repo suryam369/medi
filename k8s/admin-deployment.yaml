@@ -20,5 +20,3 @@ spec:
           env:
             - name: REACT_APP_BACKEND_URL
               value: "http://medi-backend-service:5000"
-            - name: PORT
-              value: "3500"

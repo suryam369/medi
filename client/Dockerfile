@@ -5,13 +5,12 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+# IMPORTANT: Pass env vars (Jenkins stage will handle this)
 RUN npm run build
 
-# Serve with nginx
 FROM nginx:alpine
 COPY --from=builder /app/build /usr/share/nginx/html
 
-
-EXPOSE 3000
+EXPOSE 80   
 
 CMD ["nginx", "-g", "daemon off;"]

@@ -2,55 +2,81 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_CRED = credentials('dockerhub-cred')
-        REGISTRY = "docker.io/${DOCKER_CRED_USR}"
+        DOCKER_HUB_USER = "suryamurala369"
+    }
+
+    triggers {
+        githubPush()
     }
 
     stages {
-        stage('Checkout') {
-    steps {
-        git branch: 'main',
-            url: 'https://github.com/suryam369/medi.git',
-            credentialsId: 'github-cred'
-    }
-}
 
-
-        stage('Build Docker Images') {
+        stage('Checkout Code') {
             steps {
-                sh '''
-                echo $DOCKER_CRED_PSW | docker login -u $DOCKER_CRED_USR --password-stdin
-                
-                docker build -t $REGISTRY/medi-backend:latest ./backend
-                docker build -t $REGISTRY/medi-client:latest ./client
-                docker build -t $REGISTRY/medi-admin:latest ./admin
-                '''
+                sshagent(['github-ssh-key']) {
+                    git branch: 'main', url: 'git@github.com:suryam369/medi.git'
+                }
             }
         }
 
-        stage('Push Images') {
+        stage('Build Frontend Apps') {
             steps {
-                sh '''
-                docker push $REGISTRY/medi-backend:latest
-                docker push $REGISTRY/medi-client:latest
-                docker push $REGISTRY/medi-admin:latest
-                '''
+                dir('client') {
+                    sh """
+                        export REACT_APP_BACKEND_URL=http://medi-backend-service:5000
+                        npm install
+                        npm run build
+                    """
+                }
+                dir('admin') {
+                    sh """
+                        export REACT_APP_BACKEND_URL=http://medi-backend-service:5000
+                        npm install
+                        npm run build
+                    """
+                }
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                sh """
+                    docker build -t $DOCKER_HUB_USER/medi-backend:latest ./backend
+                    docker build -t $DOCKER_HUB_USER/medi-client:latest ./client
+                    docker build -t $DOCKER_HUB_USER/medi-admin:latest ./admin
+                """
+            }
+        }
+
+        stage('Push Docker Images') {
+            steps {
+                withCredentials([string(credentialsId: 'dockerhub-pass', variable: 'DOCKER_PASS')]) {
+                    sh """
+                        echo $DOCKER_PASS | docker login -u $DOCKER_HUB_USER --password-stdin
+                        docker push $DOCKER_HUB_USER/medi-backend:latest
+                        docker push $DOCKER_HUB_USER/medi-client:latest
+                        docker push $DOCKER_HUB_USER/medi-admin:latest
+                    """
+                }
             }
         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh '''
-                kubectl apply -f k8s/
-                kubectl get pods
-                '''
+                sh """
+                    kubectl apply -f k8s/backend-deployment.yaml
+                    kubectl apply -f k8s/admin-deployment.yaml
+                    kubectl apply -f k8s/client-deployment.yaml
+                    kubectl apply -f k8s/backend-service.yaml
+                    kubectl apply -f k8s/admin-service.yaml
+                    kubectl apply -f k8s/client-service.yaml
+                """
             }
         }
     }
 
     post {
-        always {
-            sh 'docker logout || true'
-        }
+        success { echo "🚀 Deployment completed successfully!" }
+        failure { echo "❌ Deployment failed!" }
     }
 }
