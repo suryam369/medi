@@ -13,9 +13,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                sshagent(['github-ssh-key']) {
-                    git branch: 'main', url: 'git@github.com:suryam369/medi.git'
-                }
+                git branch: 'main', url: 'https://github.com/suryam369/medi.git'
             }
         }
 
