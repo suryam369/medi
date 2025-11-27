@@ -17,6 +17,8 @@ spec:
       containers:
         - name: medi-admin
           image: suryamurala369/medi-admin:latest
+          imagePullPolicy: IfNotPresent
+
           ports:
             - containerPort: 80
           env:

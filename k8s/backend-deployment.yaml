@@ -17,6 +17,8 @@ spec:
       containers:
         - name: medi-backend
           image: suryamurala369/medi-backend:latest
+          imagePullPolicy: IfNotPresent
+
           ports:
             - containerPort: 5000
           envFrom:

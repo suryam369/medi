@@ -17,6 +17,8 @@ spec:
       containers:
         - name: medi-client
           image: suryamurala369/medi-client:latest
+          imagePullPolicy: IfNotPresent
+
           ports:
             - containerPort: 80
           env:
