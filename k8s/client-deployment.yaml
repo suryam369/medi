@@ -17,15 +17,12 @@ spec:
           image: docker.io/suryamurala369/medi-client:latest
           ports:
             - containerPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: medi-client-service
-spec:
-  selector:
-    app: medi-client
-  ports:
-    - port: 80
-      targetPort: 80
-  type: NodePort
+          env:
+            - name: REACT_APP_BACKEND_URL
+              value: "http://medi-backend-service:5000"
+            - name: REACT_APP_RAZORPAY_KEY_ID
+              value: "rzp_test_vMJzshzmGap5FC"
+            - name: REACT_APP_GOOGLE_CLIENT_ID
+              value: "939406997619-dg4q1c1vhhs3nj8apl2sdf8kdkfi2u63.apps.googleusercontent.com"
+            - name: PORT
+              value: "3000"
